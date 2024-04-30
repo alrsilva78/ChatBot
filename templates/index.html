@@ -28,7 +28,7 @@
             <div class="card-body" id="chat-widget-messages">
             </div>
             <div class="card-footer">
-                <input type="text" class="form-control" id="chat-widget-input" placeholder="Type your message">
+                <input type="text" class="form-control" id="chat-widget-input" placeholder="Type your message....">
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
     <script>
         $(document).ready(function() {
             $("#chat-widget-button").on("click", function () {
-                $("#chat-widget").removeClass("d-none");
+                $("#chat-widget").toggleClass("d-none");
             });
             $("#chat-widget-close-button").on("click", function () {
                 $("#chat-widget").addClass("d-none");
