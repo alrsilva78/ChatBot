@@ -40,3 +40,10 @@
 #  username: username
 #  password: password
 #  queue: queue
+endpoints:
+  # Endpoint para enviar mensagens para o assistente virtual e receber respostas
+  rest:
+    # URL do endpoint REST
+    url: "http://localhost:5005/webhooks/rest/webhook"
+
+

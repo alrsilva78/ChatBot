@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 
-RASA_API_URL = "http://localhost:5002/api"
+RASA_API_URL = "http://localhost:5005/webhooks/rest/webhook"
 
 app= Flask(__name__)
 
@@ -9,13 +9,13 @@ app= Flask(__name__)
 def index():
     return render_template ('index.html')
 
-@app.route('/api', method=['POST'])
+@app.route('/webhook', methods=['POST'])
 def webhook():
     user_message = request.json['message']
     print("User Message:", user_message)
     
     # Send user message to Tasa and get bot's response
-    rasa_response = request.post(RASA_API_URL, json={'messsage': user_message})
+    rasa_response = requests.post(RASA_API_URL, json={'message': user_message})
     rasa_response_json = rasa_response.json()
     
     print("Rasa Response:", rasa_response_json)

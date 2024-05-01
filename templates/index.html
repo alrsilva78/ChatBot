@@ -27,43 +27,62 @@
 </head>
 <body>
 
-<div class="container">
-    <h1>Welcome to my ChatBot</h1>
-    <button id="chat-widget-button" type="button" class="btn btn-primary rounded-circle position-fixed chat-sign-button" style="bottom: 20px; right: 20px;"></button>
-    
-    <div id="chat-widget" class="card position-fixed shadow d-none" style="bottom: 100px; right: 20px; width: 300px;">
-        <div class="card-header bg-primary text-white">
-            ChatBot
-            <button id="chat-widget-close-button" type="button" class="btn-close float-end" aria-label="Close"></button>
-        </div>
-        <div class="card-body" id="chat-widget-messages">
-        </div>
-        <div class="card-footer">
-            <input type="text" class="form-control" id="chat-widget-input" placeholder="Type your message....">
+    <div class="container">
+        <h1>Welcome to my ChatBot</h1>
+        <button id="chat-widget-button" type="button" class="btn btn-primary rounded-circle position-fixed chat-sign-button" style="bottom: 20px; right: 20px;"></button>
+        
+        <div id="chat-widget" class="card position-fixed shadow d-none" style="bottom: 100px; right: 20px; width: 300px;">
+            <div class="card-header bg-primary text-white">
+                ChatBot
+                <button id="chat-widget-close-button" type="button" class="btn-close float-end" aria-label="Close"></button>
+            </div>
+            <div class="card-body" id="chat-widget-messages">
+            </div>
+            <div class="card-footer">
+                <input type="text" class="form-control" id="chat-widget-input" placeholder="Type your message....">
+            </div>
         </div>
     </div>
-</div>
-
-<script>
-    $(document).ready(function() {
-        $("#chat-widget-button").on("click", function () {
-            $("#chat-widget").toggleClass("d-none");
+    
+    <script>
+        $(document).ready(function() {
+            $("#chat-widget-button").on("click", function () {
+                $("#chat-widget").toggleClass("d-none");
+            });
+            $("#chat-widget-close-button").on("click", function () {
+                $("#chat-widget").addClass("d-none");
+            });
+    
+            //Handle user message to the chatbox
+            $("#chat-widget-input").keypress(function(event){
+                if (event.which === 13) {
+                    let userMessage = $("#chat-widget-input").val();
+                    $("#chat-widget-input").val('');
+    
+                    // Append user message to the chatbox
+                    $("#chat-widget-messages").append("<div><strong>You:</strong> " + userMessage + "</div>");
+                    
+                    // Send user message to server and get bot's response
+                    $.ajax({
+                        type: "POST",
+                        url: "/webhook",
+                        contentType: "application/json",
+                        data: JSON.stringify({message: userMessage}),
+                        success: function(data) {
+                            let botResponse = data.response;
+                    
+                            // Append bot's response to the chatbox
+                            $("#chat-widget-messages").append("<div><strong>Bot:</strong> " + botResponse + "</div>");
+                        },
+                        error: function() {
+                            // Handle error if needed
+                        }
+                    });
+    
+                }
+            }); 
         });
-        $("#chat-widget-close-button").on("click", function () {
-            $("#chat-widget").addClass("d-none");
-        });
-
-        //Handle user message to the chatbox
-        $("#chat-widget-input").keypress(function(event){
-            if (event.which === 13) {
-                let userMessage = $("#chat-widget-input").val();
-                $("#chat-widget-input").val('');
-
-                // Append user message to the chatbox
-                $("#chat-widget-messages").append("<div><strong>You:</strong> " + userMessage + "</div>");
-            }
-        }); 
-    });
-</script>
-</body>
+    </script>
+    </body>
+    
 </html>
